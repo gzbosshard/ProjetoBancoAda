@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjetoBancoGabi
+namespace ProjetoBancoAda
 {
     internal class ContaCorrente : Conta
     {
