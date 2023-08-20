@@ -7,109 +7,118 @@ using System.Threading.Tasks;
 
 namespace ProjetoBancoAda
 {
-
     internal class Conta
     {
-        protected string Nome { get; set; }
+        // CLASSES -----
+
+        Utilidades util = new();
+
+        // PROPRIEDADES -----
+
+        public string Nome { get; set; }
         protected string Endereco { get; set; }
-        protected int NumeroConta { get; set; }
+        public int NumeroConta { get; set; }
         protected long CPF { get; private set; }
         protected int Senha { get; set; }
-        protected double Saldo { get; set; }
+        public double Saldo { get; set; }
+        protected double Limite { get; set; } = 0;
         protected DateTime DataDeNascimento { get; set; } // validacação para idade aceitável
         public double ValorDeposito { get; set; }
         public double ValorSaque { get; set; }
-
-        protected bool StatusConta { get; set; } = false;
-
+        public string TipoConta { get; set; }
 
         // Listas de Contas
 
-        public List<double> SaldoConta { get; set; } = new List<double>();
         public List<DateTime> DataOperacaoConta { get; set; } = new();
         public List<double> OperacoesConta { get; set; } = new List<double>();
         public List<string> TipoOperacoesConta { get; set; } = new List<string>();
 
+        // MÉTODOS -----
+
+        // Depositar
 
         public virtual double Depositar()
         {
-            bool validacaoDeposito = false;
-            do
-            {
-                try
-                {
-                    Console.Write("Valor a ser depositado: ");
-                    ValorDeposito = double.Parse(Console.ReadLine());
-                    validacaoDeposito = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Digite um valor válido{Environment.NewLine}\u001b[0m");
-                }
-            }
-            while (!validacaoDeposito);
-            
+            ValorDeposito = util.ValidacaoDouble("Valor a ser depositado: ");
+
             OperacoesConta.Add(ValorDeposito);
             DataOperacaoConta.Add(DateTime.Now);
             TipoOperacoesConta.Add("Deposito");
             Console.WriteLine($"Depósito de R$ {ValorDeposito.ToString("F2")} realizado com sucesso!");
             return Saldo += ValorDeposito;
-
         }
+
+        // Sacar
         public virtual double Sacar()
         {
+            util.ValidacaoInt("Informe a Senha: ");
 
-            ValidarSenha();
+            Console.WriteLine($"{Environment.NewLine}Seu saldo atual é de: R4 {Saldo.ToString("F2")}.{Environment.NewLine}");
+            ValorSaque = util.ValidacaoDouble("Digite o valor que deseja sacar: ");
 
-            bool validacaoValorSaque = false;
-            do
+            if (ValorSaque > (Saldo))
             {
-                try
-                {
-                    Console.Write("Digite o valor que deseja sacar: ");
-                    ValorSaque = double.Parse(Console.ReadLine());
-                    validacaoValorSaque = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Digite um valor válido{Environment.NewLine}\u001b[0m");
-                }
-
+                Console.WriteLine($"Saldo Insuficiente. O seu saldo é de R$ {Saldo.ToString("F2")}.");
+                return Saldo;
             }
-            while (!validacaoValorSaque);
+            else
+            {
+                OperacoesConta.Add(ValorSaque);
+                DataOperacaoConta.Add(DateTime.Now);
+                TipoOperacoesConta.Add("Saque");
+                Console.WriteLine($"Retirada de {ValorSaque} realizado com sucesso!");
+                return Saldo -= ValorSaque;
+            }
 
-            OperacoesConta.Add(ValorSaque);
-            DataOperacaoConta.Add(DateTime.Now);
-            TipoOperacoesConta.Add("Saque");
-            Console.WriteLine($"Retirada de {ValorSaque} realizado com sucesso!");
-            return Saldo -= ValorSaque;
+
         }
 
-        public void ConsultarSaldo()
+        // Consultar Saldo
+        public virtual void ConsultarSaldo()
         {
+
             Console.WriteLine($"O Saldo na conta é de R${Saldo.ToString("F2")}");
         }
 
-        public void ConsultarExtrato()
+        // Consultar Extrato
+        public virtual void ConsultarExtrato()
         {
             Console.WriteLine($"----- EXTRATO -----{Environment.NewLine}");
-
-            Console.WriteLine($"Conta: {NumeroConta}{Environment.NewLine}");
-            Console.WriteLine($"Nome do Titular: {Nome}{Environment.NewLine}");
-
-            Console.WriteLine($"O Saldo na conta é de R${Saldo.ToString("F2")}{Environment.NewLine}");
             Console.WriteLine(DateTime.Now);
+            Console.WriteLine();
+
+            Console.WriteLine($"Conta: {NumeroConta} | Nome do Titular: {Nome} | Tipo de Conta: {TipoConta}{Environment.NewLine}");
+
+
+
 
             // Operacoes realizadas
 
             Console.WriteLine($"----- OPERAÇÕES REALIZADAS -----{Environment.NewLine}");
 
-
-            for (int j = 0; j < OperacoesConta.Count; j++)
+            if (OperacoesConta.Count == 0)
             {
-                Console.WriteLine($"{j+1}: {DataOperacaoConta[j]} : {TipoOperacoesConta[j]} : R$ {OperacoesConta[j].ToString("F2")}");
+                Console.WriteLine($"Ainda não foram realizadas operações bancárias.{Environment.NewLine}");
             }
+            else
+            {
+
+                for (int i = 0; i < OperacoesConta.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}: {DataOperacaoConta[i]} : {TipoOperacoesConta[i]} : R$ {OperacoesConta[i].ToString("F2")}");
+                }
+            }
+
+            // Saldos
+
+            Console.WriteLine($"{Environment.NewLine}----- SALDO -----{Environment.NewLine}");
+
+            Console.WriteLine($"Saldo: R${Saldo.ToString("F2")}{Environment.NewLine}");
+
+
         }
+
+        // Gerar Senha
 
         public int GerarSenha()
         {
@@ -117,76 +126,44 @@ namespace ProjetoBancoAda
             Senha = rnd.Next(10000, 99999);
 
             return Senha;
-        }       
+        }
+
+        // Gerar Número da Conta
+
+        public int GerarConta()
+        {
+            Random rndNumeroConta = new Random();
+            NumeroConta = rndNumeroConta.Next(1000, 9999);
+
+            Console.WriteLine($"O número da conta é {NumeroConta}");
+            return NumeroConta;
+        }
 
         // Abrir Conta
-        public void AbrirConta()
+        public virtual void AbrirConta()
         {
-
+            Console.Clear();
+            Console.WriteLine($"----- ABERTURA DE CONTA -----{Environment.NewLine}");
             Console.WriteLine($"Seja bem vindo ao nosso banco!{Environment.NewLine}" +
                 $"Precisaremos seguir algumas etapas para abrir a sua conta:");
 
-
             // nome
 
-            Console.WriteLine("Preencha os dados pessoais:");
+            Console.WriteLine($"{Environment.NewLine}Preencha os dados pessoais:{Environment.NewLine}");
             Console.Write("Nome: ");
             Nome = Console.ReadLine();
 
             // data de nascimento
 
-            bool validacaoDataNascimento = false;
-
-            do
-            {
-                try
-                {
-                    Console.Write("Data de Nascimento: ");
-                    DataDeNascimento = DateTime.Parse(Console.ReadLine());
-                    validacaoDataNascimento = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Digite um valor válido{Environment.NewLine}\u001b[0m");
-                }
-
-            }
-            while (!validacaoDataNascimento);
+            DataDeNascimento = util.ValidacaoData("Data de nascimento: ");
 
             // Numero da Conta
 
-            Random rndNumeroConta = new Random();
-            NumeroConta = rndNumeroConta.Next(1000, 9999);
-
-            Console.WriteLine($"O número da conta é {NumeroConta}");
+            GerarConta();
 
             // CPF
 
-            bool validacaoCPF = false;
-            string cpf = "vazio";
-
-            do
-            {
-                try
-                {
-                    Console.Write("CPF (digite apenas os números): ");
-                    cpf = Console.ReadLine();
-                    CPF = long.Parse(cpf);
-                    validacaoCPF = true;
-
-                    if (cpf.Length != 11)
-                    {
-                        Console.WriteLine($"\u001b[31mOops, tivemos um erro! Tente novamente. Lembre-se que o CPF tem 11 dígitos.{Environment.NewLine}\u001b[0m");
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Tente novamente.{Environment.NewLine}\u001b[0m");
-                }
-
-            }
-            while (!validacaoCPF || cpf.Length != 11);
+            CPF = util.ValidacaoCPF();
 
             // endereço
 
@@ -195,23 +172,8 @@ namespace ProjetoBancoAda
 
             // saldo inicial
 
-            bool validacaoSaldoInicial = false;
 
-            do
-            {
-                try
-                {
-                    Console.WriteLine("Defina o saldo Inicial:");
-                    Console.Write("Saldo: ");
-                    Saldo = double.Parse(Console.ReadLine());
-                    validacaoSaldoInicial = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Tente novamente.{Environment.NewLine}\u001b[0m");
-                }
-            }
-            while (!validacaoSaldoInicial);
+            Saldo = util.ValidacaoDouble("Saldo inicial: ");
 
 
             // gerar senha
@@ -220,7 +182,6 @@ namespace ProjetoBancoAda
 
             // definir status da conta como aberta
 
-            StatusConta = true;
             Console.WriteLine($"{Environment.NewLine}Conta Aberta com sucesso!");
 
             Console.WriteLine($"{Environment.NewLine}Sua senha é {Senha}");
@@ -230,44 +191,15 @@ namespace ProjetoBancoAda
         // Encerrar Conta
         public void EncerrarConta()
         {
-            StatusConta = false;
-            Console.WriteLine("Conta Encerrada com sucesso!");
+            Console.WriteLine($"{Environment.NewLine}Conta Encerrada com sucesso!{Environment.NewLine}");
         }
-        
 
-        // validacao Senha
+        // Definir Limite
 
-        public void ValidarSenha()
+        public virtual double DefinirLimite()
         {
-            bool validacaoSenha = false;
-            do
-            {
-                try
-                {
-                    Console.Write("Informe a Senha: ");
-                    int senha = int.Parse(Console.ReadLine());
-                    if (senha != Senha)
-                    {
-                        Console.WriteLine($"\u001b[31mSenha Incorreta! Digite um valor válido{Environment.NewLine}\u001b[0m");
-                    }
-                    else
-                    {
-                        validacaoSenha = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Tente Novamente{Environment.NewLine}\u001b[0m");
-                }
-            }
-            while (!validacaoSenha);
+            return Limite;
         }
-
-        
-
-        
-
-         
 
     }
 

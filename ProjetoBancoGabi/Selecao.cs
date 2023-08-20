@@ -8,85 +8,51 @@ namespace ProjetoBancoAda
 {
     internal class Selecao
     {
+        // CLASSES -----
+
         Conta contaPrincipal = new Conta();
+        Utilidades util = new();
 
-        protected string TipoConta { get; set; }
+        // MÉTODOS -----
 
-        public Selecao()
-        {
-            
-        }
-
-        // Selecionar Operação
+        // Selecionar Operação : Menu Principal
         public void SelecionarOperacao()
         {
             Console.Clear();
-
-
-            bool validacaoOperacao = false;
-            int opcaoOperacao = 0;
-            do
-            {
-                try
-                {
-                    Console.WriteLine("Selecione a operação a ser realizada:");
-                    Console.WriteLine("1. Abrir Conta");
-                    Console.WriteLine("2. Depositar");
-                    Console.WriteLine("3. Sacar");
-                    Console.WriteLine("4. Consultar Saldo");
-                    Console.WriteLine("5. Consultar Extrato");
-                    Console.WriteLine("6. Alterar Tipo de Conta");
-                    Console.WriteLine("7. Encerrar Conta");
-                    Console.WriteLine("8. Sair");
-                    Console.Write("Número da opção: ");
-                    opcaoOperacao = int.Parse(Console.ReadLine());
-                    validacaoOperacao = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Digite um valor válido{Environment.NewLine}\u001b[0m");
-                }
-            }
-            while (!validacaoOperacao && opcaoOperacao > 0 && opcaoOperacao < 9);
+            int opcaoOperacao = util.ValidarMenu();
 
             switch (opcaoOperacao)
             {
-                case 1: // abrir conta
-                    Console.Clear();
-                    contaPrincipal.AbrirConta();
-                    VoltarMenu();
-                    break;
-                case 2: // depositar
+                case 1: // depositar
                     Console.Clear();
                     contaPrincipal.Depositar();
                     VoltarMenu();
                     break;
-                case 3: // sacar
+                case 2: // sacar
                     Console.Clear();
                     contaPrincipal.Sacar();
                     VoltarMenu();
                     break;
-                case 4: // consultar saldo
+                case 3: // consultar saldo
                     Console.Clear();
                     contaPrincipal.ConsultarSaldo();
                     VoltarMenu();
                     break;
-                case 5: // consultar extrato
+                case 4: // consultar extrato
                     Console.Clear();
                     contaPrincipal.ConsultarExtrato();
                     VoltarMenu();
                     break;
-                case 6: //alterar tipo de conta
+                case 5: //alterar tipo de conta
                     Console.Clear();
                     AlterarTipoConta();
                     VoltarMenu();
                     break;
-                case 7: // encerrar tipo de conta
+                case 6: // encerrar tipo de conta
                     Console.Clear();
                     contaPrincipal.EncerrarConta();
-                    VoltarMenu();
                     break;
-                case 8:
+                case 7:
                     Console.Clear();
                     Console.WriteLine("Sistema encerrado com sucesso!");
                     break;
@@ -131,9 +97,10 @@ namespace ProjetoBancoAda
             while (!validacaoVoltarMenu);
         }
 
-
+        // Alterar tipo de conta
         public void AlterarTipoConta()
         {
+            Console.Clear();
             Console.WriteLine($"----- SELECIONAR TIPO DE CONTA -----{Environment.NewLine}");
 
             bool validacaoTipoConta = false;
@@ -145,8 +112,9 @@ namespace ProjetoBancoAda
                     Console.WriteLine("Selecione o tipo de conta:");
                     Console.WriteLine("1. Conta Corrente");
                     Console.WriteLine("2. Conta Poupança");
-                    Console.Write("Número da opção: ");
+                    Console.Write($"{Environment.NewLine}Número da opção: ");
                     opcaoConta = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
                     validacaoTipoConta = true;
 
                 }
@@ -160,16 +128,50 @@ namespace ProjetoBancoAda
             switch (opcaoConta)
             {
                 case 1:
-                    TipoConta = "Conta Corrente";
-                    contaPrincipal = new ContaCorrente();
+                    contaPrincipal = new ContaCorrente(contaPrincipal.Nome, contaPrincipal.NumeroConta, contaPrincipal.Saldo, contaPrincipal.DataOperacaoConta, contaPrincipal.OperacoesConta, contaPrincipal.TipoOperacoesConta, "Conta Corrente");
+                    contaPrincipal.DefinirLimite();
                     break;
                 case 2:
-                    TipoConta = "Conta Poupança";
-                    contaPrincipal = new ContaPoupanca();
+                    contaPrincipal = new ContaPoupanca(contaPrincipal.Nome, contaPrincipal.NumeroConta, contaPrincipal.Saldo, contaPrincipal.DataOperacaoConta, contaPrincipal.OperacoesConta, contaPrincipal.TipoOperacoesConta, "Conta Poupança");
                     break;
                 default:
                     Console.WriteLine("Opção Inválida");
                     break;
+            }
+        }
+
+        // Tela Inicial
+
+        // PROPRIEDADES
+
+        public int Opcao { get; set; }
+
+        // MÉTODOS
+        public void Iniciar()
+        {
+            Console.WriteLine($"Seja bem vindo ao banco!{Environment.NewLine}");
+
+            Console.WriteLine($"Selecione a opção de interesse:{Environment.NewLine}");
+            Console.WriteLine("1. Abrir conta.");
+            Console.WriteLine($"2. Acessar conta.{Environment.NewLine}");
+            Opcao = util.ValidacaoInt("Opção desejada: ");
+
+            switch (Opcao)
+            {
+                case 1:
+                    AlterarTipoConta();
+                    contaPrincipal.AbrirConta();
+                    VoltarMenu();
+                    break;
+                case 2:
+                    Console.WriteLine($"Você ainda não tem uma conta. Abra uma agora mesmo!{Environment.NewLine}");
+                    Console.WriteLine($"Pressione qualquer tecla para processguir para a abertura de conta.{Environment.NewLine}");
+                    Console.ReadKey();
+                    AlterarTipoConta();
+                    contaPrincipal.AbrirConta();
+                    VoltarMenu();
+                    break;
+                default: Console.WriteLine("Opção Invalida"); break;
             }
         }
     }

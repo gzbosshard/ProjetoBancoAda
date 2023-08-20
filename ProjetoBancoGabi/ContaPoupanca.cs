@@ -8,23 +8,36 @@ namespace ProjetoBancoAda
 {
     internal class ContaPoupanca : Conta
     {
+        // CLASSES -----
+
+        Utilidades util = new();
+        
+
+        // PROPRIEDADES -----
         public double TaxaRendimento { get; set; } = 0.3;
 
-        public override double Sacar()
+        // MÉTODOS -----
+
+
+
+        // Construtor
+
+        public ContaPoupanca(string nome, int numeroConta, double saldo, List<DateTime> data, List<double> operacoes, List<string> tipoOperacoes, string tipoConta)
         {
-            base.Sacar();
-            SaldoConta.Add(Saldo);
-            return Saldo;
+            Nome = nome;
+            NumeroConta = numeroConta;
+            Saldo = saldo;
+            DataOperacaoConta = data;
+            OperacoesConta = operacoes;
+            TipoOperacoesConta = tipoOperacoes;
+            TipoConta = tipoConta;
         }
+
+        // Depositar
         public override double Depositar()
         {
-
-            Console.Write("Valor a ser depositado: ");
-            ValorDeposito = double.Parse(Console.ReadLine());
-            OperacoesConta.Add(ValorDeposito);
-            DataOperacaoConta.Add(DateTime.Now);
-            Console.WriteLine($"Depósito de R$ {ValorDeposito.ToString("F2")} realizado com sucesso!");
-            return Saldo += ValorDeposito * (1 + TaxaRendimento);
+            base.Depositar();
+            return Saldo += (ValorDeposito * TaxaRendimento);
 
         }
     }

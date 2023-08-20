@@ -4,11 +4,11 @@
     {
         static void Main(string[] args)
         {
-            
-            Banco banco = new Banco();
 
-            banco.chamarSelecao();
 
+            Selecao novaSelecao = new();
+
+            novaSelecao.Iniciar();
 
         }
     }
