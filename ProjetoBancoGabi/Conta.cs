@@ -15,23 +15,23 @@ namespace ProjetoBancoAda
 
         // PROPRIEDADES -----
 
-        public string Nome { get; set; }
+        public string Nome { get; protected set; }
         protected string Endereco { get; set; }
-        public int NumeroConta { get; set; }
+        public int NumeroConta { get; protected set; }
         protected long CPF { get; private set; }
-        protected int Senha { get; set; }
-        public double Saldo { get; set; }
+        public int Senha { get; protected set; }
+        public double Saldo { get; protected set; }
         protected double Limite { get; set; } = 0;
         protected DateTime DataDeNascimento { get; set; } // validacação para idade aceitável
-        public double ValorDeposito { get; set; }
-        public double ValorSaque { get; set; }
-        public string TipoConta { get; set; }
+        public double ValorDeposito { get; protected set; }
+        public double ValorSaque { get; protected set; }
+        public string TipoConta { get; protected set; }
 
         // Listas de Contas
 
-        public List<DateTime> DataOperacaoConta { get; set; } = new();
-        public List<double> OperacoesConta { get; set; } = new List<double>();
-        public List<string> TipoOperacoesConta { get; set; } = new List<string>();
+        public List<DateTime> DataOperacaoConta { get; protected set; } = new();
+        public List<double> OperacoesConta { get; protected set; } = new List<double>();
+        public List<string> TipoOperacoesConta { get; protected set; } = new List<string>();
 
         // MÉTODOS -----
 
@@ -51,24 +51,33 @@ namespace ProjetoBancoAda
         // Sacar
         public virtual double Sacar()
         {
-            util.ValidacaoInt("Informe a Senha: ");
-
-            Console.WriteLine($"{Environment.NewLine}Seu saldo atual é de: R4 {Saldo.ToString("F2")}.{Environment.NewLine}");
-            ValorSaque = util.ValidacaoDouble("Digite o valor que deseja sacar: ");
-
-            if (ValorSaque > (Saldo))
+            int senha = 0;
+            do
             {
-                Console.WriteLine($"Saldo Insuficiente. O seu saldo é de R$ {Saldo.ToString("F2")}.");
-                return Saldo;
+                 senha = util.ValidacaoInt("Informe a Senha: ");
             }
-            else
-            {
-                OperacoesConta.Add(ValorSaque);
-                DataOperacaoConta.Add(DateTime.Now);
-                TipoOperacoesConta.Add("Saque");
-                Console.WriteLine($"Retirada de {ValorSaque} realizado com sucesso!");
-                return Saldo -= ValorSaque;
-            }
+            while (senha != Senha);
+            
+           
+                Console.WriteLine($"{Environment.NewLine}Seu saldo atual é de: R$ {Saldo.ToString("F2")}.{Environment.NewLine}");
+                ValorSaque = util.ValidacaoDouble("Digite o valor que deseja sacar: ");
+
+                if (ValorSaque > (Saldo))
+                {
+                    Console.WriteLine($"\u001b[31mSaldo Insuficiente. O seu saldo é de R$ {Saldo.ToString("F2")}.\u001b[0m");
+                    return Saldo;
+                }
+                else
+                {
+                    OperacoesConta.Add(ValorSaque);
+                    DataOperacaoConta.Add(DateTime.Now);
+                    TipoOperacoesConta.Add("Saque");
+                    Console.WriteLine($"Retirada de {ValorSaque} realizado com sucesso!");
+                    return Saldo -= ValorSaque;
+                }
+            
+
+            
 
 
         }
@@ -88,9 +97,6 @@ namespace ProjetoBancoAda
             Console.WriteLine();
 
             Console.WriteLine($"Conta: {NumeroConta} | Nome do Titular: {Nome} | Tipo de Conta: {TipoConta}{Environment.NewLine}");
-
-
-
 
             // Operacoes realizadas
 

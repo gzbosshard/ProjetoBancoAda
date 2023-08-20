@@ -13,6 +13,10 @@ namespace ProjetoBancoAda
         Conta contaPrincipal = new Conta();
         Utilidades util = new();
 
+        // PROPRIEDAEDS
+
+        public int Opcao { get; set; }
+
         // MÉTODOS -----
 
         // Selecionar Operação : Menu Principal
@@ -128,11 +132,11 @@ namespace ProjetoBancoAda
             switch (opcaoConta)
             {
                 case 1:
-                    contaPrincipal = new ContaCorrente(contaPrincipal.Nome, contaPrincipal.NumeroConta, contaPrincipal.Saldo, contaPrincipal.DataOperacaoConta, contaPrincipal.OperacoesConta, contaPrincipal.TipoOperacoesConta, "Conta Corrente");
+                    contaPrincipal = new ContaCorrente(contaPrincipal.Senha, contaPrincipal.Nome, contaPrincipal.NumeroConta, contaPrincipal.Saldo, contaPrincipal.DataOperacaoConta, contaPrincipal.OperacoesConta, contaPrincipal.TipoOperacoesConta, "Conta Corrente");
                     contaPrincipal.DefinirLimite();
                     break;
                 case 2:
-                    contaPrincipal = new ContaPoupanca(contaPrincipal.Nome, contaPrincipal.NumeroConta, contaPrincipal.Saldo, contaPrincipal.DataOperacaoConta, contaPrincipal.OperacoesConta, contaPrincipal.TipoOperacoesConta, "Conta Poupança");
+                    contaPrincipal = new ContaPoupanca(contaPrincipal.Senha, contaPrincipal.Nome, contaPrincipal.NumeroConta, contaPrincipal.Saldo, contaPrincipal.DataOperacaoConta, contaPrincipal.OperacoesConta, contaPrincipal.TipoOperacoesConta, "Conta Poupança");
                     break;
                 default:
                     Console.WriteLine("Opção Inválida");
@@ -142,11 +146,6 @@ namespace ProjetoBancoAda
 
         // Tela Inicial
 
-        // PROPRIEDADES
-
-        public int Opcao { get; set; }
-
-        // MÉTODOS
         public void Iniciar()
         {
             Console.WriteLine($"Seja bem vindo ao banco!{Environment.NewLine}");

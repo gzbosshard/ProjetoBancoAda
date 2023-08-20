@@ -22,7 +22,7 @@ namespace ProjetoBancoAda
 
         // Construtor
 
-        public ContaPoupanca(string nome, int numeroConta, double saldo, List<DateTime> data, List<double> operacoes, List<string> tipoOperacoes, string tipoConta)
+        public ContaPoupanca(int senha, string nome, int numeroConta, double saldo, List<DateTime> data, List<double> operacoes, List<string> tipoOperacoes, string tipoConta)
         {
             Nome = nome;
             NumeroConta = numeroConta;
@@ -31,6 +31,7 @@ namespace ProjetoBancoAda
             OperacoesConta = operacoes;
             TipoOperacoesConta = tipoOperacoes;
             TipoConta = tipoConta;
+            Senha = senha;
         }
 
         // Depositar

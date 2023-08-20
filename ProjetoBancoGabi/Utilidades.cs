@@ -67,6 +67,10 @@ namespace ProjetoBancoAda
             return IntValidado;
         }
 
+
+        
+
+
         // Validação do CPF
         public long ValidacaoCPF()
         {

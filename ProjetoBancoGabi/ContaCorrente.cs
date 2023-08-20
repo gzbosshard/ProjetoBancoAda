@@ -21,7 +21,7 @@ namespace ProjetoBancoAda
 
         // Construtor
 
-        public ContaCorrente(string nome, int numeroConta, double saldo, List<DateTime> data, List<double> operacoes, List<string> tipoOperacoes, string tipoConta)
+        public ContaCorrente(int senha, string nome, int numeroConta, double saldo, List<DateTime> data, List<double> operacoes, List<string> tipoOperacoes, string tipoConta)
         {
             Nome = nome;
             NumeroConta = numeroConta;
@@ -30,6 +30,7 @@ namespace ProjetoBancoAda
             OperacoesConta = operacoes;
             TipoOperacoesConta = tipoOperacoes;
             TipoConta = tipoConta;
+            Senha = senha;
         }
 
 
@@ -37,7 +38,12 @@ namespace ProjetoBancoAda
         public override double Sacar()
         {
 
-            util.ValidacaoInt("Informe a Senha: ");
+            int senha = 0;
+            do
+            {
+                senha = util.ValidacaoInt("Informe a Senha: ");
+            }
+            while (senha != Senha);
 
             Console.WriteLine($"Seu saldo atual é de: R4 {Saldo.ToString("F2")} e há R$ {Limite.ToString("F2")} de limite;");
             ValorSaque = util.ValidacaoDouble("Digite o valor que deseja sacar: ");
