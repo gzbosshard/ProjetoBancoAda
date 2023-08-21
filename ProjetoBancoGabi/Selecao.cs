@@ -79,7 +79,7 @@ namespace ProjetoBancoAda
             {
                 try
                 {
-                    Console.WriteLine("Deseja voltar ao menu? Responda S ou N");
+                    Console.WriteLine($"\u001b[36mDeseja voltar ao menu? Responda S ou N.\u001b[0m");
                     voltarMenu = Console.ReadLine();
                     validacaoVoltarMenu = true;
 

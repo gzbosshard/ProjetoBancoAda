@@ -21,6 +21,7 @@ namespace ProjetoBancoAda
         protected long CPF { get; private set; }
         public int Senha { get; protected set; }
         public double Saldo { get; protected set; }
+        public double SaldoInicial { get; protected set; }
         protected double Limite { get; set; } = 0;
         protected DateTime DataDeNascimento { get; set; } // validacação para idade aceitável
         public double ValorDeposito { get; protected set; }
@@ -51,13 +52,7 @@ namespace ProjetoBancoAda
         // Sacar
         public virtual double Sacar()
         {
-            int senha = 0;
-            do
-            {
-                 senha = util.ValidacaoInt("Informe a Senha: ");
-            }
-            while (senha != Senha);
-            
+            util.SenhaValidada(Senha);            
            
                 Console.WriteLine($"{Environment.NewLine}Seu saldo atual é de: R$ {Saldo.ToString("F2")}.{Environment.NewLine}");
                 ValorSaque = util.ValidacaoDouble("Digite o valor que deseja sacar: ");
@@ -75,11 +70,6 @@ namespace ProjetoBancoAda
                     Console.WriteLine($"Retirada de {ValorSaque} realizado com sucesso!");
                     return Saldo -= ValorSaque;
                 }
-            
-
-            
-
-
         }
 
         // Consultar Saldo
@@ -119,6 +109,7 @@ namespace ProjetoBancoAda
 
             Console.WriteLine($"{Environment.NewLine}----- SALDO -----{Environment.NewLine}");
 
+            Console.WriteLine($"Saldo Inicial: R${SaldoInicial.ToString("F2")}{Environment.NewLine}");
             Console.WriteLine($"Saldo: R${Saldo.ToString("F2")}{Environment.NewLine}");
 
 
@@ -146,7 +137,7 @@ namespace ProjetoBancoAda
         }
 
         // Abrir Conta
-        public virtual void AbrirConta()
+        public void AbrirConta()
         {
             Console.Clear();
             Console.WriteLine($"----- ABERTURA DE CONTA -----{Environment.NewLine}");
@@ -156,8 +147,8 @@ namespace ProjetoBancoAda
             // nome
 
             Console.WriteLine($"{Environment.NewLine}Preencha os dados pessoais:{Environment.NewLine}");
-            Console.Write("Nome: ");
-            Nome = Console.ReadLine();
+
+            Nome = util.ValidarTexto("Nome: ");
 
             // data de nascimento
 
@@ -173,13 +164,13 @@ namespace ProjetoBancoAda
 
             // endereço
 
-            Console.Write("Endereço: ");
-            Endereco = Console.ReadLine();
+            Endereco = util.ValidarTexto("Endereço: ");
 
             // saldo inicial
 
 
             Saldo = util.ValidacaoDouble("Saldo inicial: ");
+            SaldoInicial = Saldo;
 
 
             // gerar senha

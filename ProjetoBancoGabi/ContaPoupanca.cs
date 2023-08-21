@@ -18,8 +18,6 @@ namespace ProjetoBancoAda
 
         // MÉTODOS -----
 
-
-
         // Construtor
 
         public ContaPoupanca(int senha, string nome, int numeroConta, double saldo, List<DateTime> data, List<double> operacoes, List<string> tipoOperacoes, string tipoConta)

@@ -13,8 +13,10 @@ namespace ProjetoBancoAda
         public double DoubleValidado { get; set; }
         public int IntValidado { get; set; }
         public int OpcaoOperacao { get; set; }
+        public int Senha { get; set; }
         public long CPFValidado { get; set; }
         public string Mensagem { get; set; }
+        public string TextoValidado { get; set; }
         public DateTime DataValidada { get; set; }
 
         // MÉTODOS -----
@@ -67,8 +69,49 @@ namespace ProjetoBancoAda
             return IntValidado;
         }
 
+        // Validação Senha
 
+        public int SenhaValidada(int senha)
+        {
+            Senha = senha;
+            do
+            {
+                int senhaInformada = ValidacaoInt("Informe a Senha: ");
+                if (senhaInformada != Senha)
+                {
+                    Console.WriteLine($"\u001b[31mSenha inválida! Tente novamente.{Environment.NewLine}\u001b[0m");
+                }
+            }
+            while (senha != Senha);
+
+            return Senha;
+        }
         
+        // Validar Texto
+
+        public string ValidarTexto(string mensagem)
+        {
+            bool validacao = false;
+            Mensagem = mensagem;
+
+            do
+            {
+                Console.Write(Mensagem);
+                TextoValidado = Console.ReadLine();
+
+                if (TextoValidado == "")
+                {
+                    Console.WriteLine($"\u001b[31mEsse campo é obrigatório!\u001b[0m");
+                }
+                else
+                {
+                    validacao = true;
+                }
+            }
+            while (!validacao);
+
+            return TextoValidado;
+        }
 
 
         // Validação do CPF

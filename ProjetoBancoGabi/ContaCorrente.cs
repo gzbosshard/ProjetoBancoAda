@@ -37,20 +37,14 @@ namespace ProjetoBancoAda
         // Sacar
         public override double Sacar()
         {
+            util.SenhaValidada(Senha);
 
-            int senha = 0;
-            do
-            {
-                senha = util.ValidacaoInt("Informe a Senha: ");
-            }
-            while (senha != Senha);
-
-            Console.WriteLine($"Seu saldo atual é de: R4 {Saldo.ToString("F2")} e há R$ {Limite.ToString("F2")} de limite;");
+            Console.WriteLine($"Seu saldo atual é de: R$ {Saldo.ToString("F2")} e há R$ {Limite.ToString("F2")} de limite.{Environment.NewLine}");
             ValorSaque = util.ValidacaoDouble("Digite o valor que deseja sacar: ");
 
             if (ValorSaque > (Saldo + Limite))
             {
-                Console.WriteLine($"Saldo Insuficiente. O seu saldo é de R$ {Saldo.ToString("F2")}.");
+                Console.WriteLine($"{Environment.NewLine}\u001b[31mSaldo Insuficiente. O seu saldo é de R$ {Saldo.ToString("F2")}.\u001b[0m");
                 return Saldo;
             }
             else
@@ -80,12 +74,6 @@ namespace ProjetoBancoAda
             Console.WriteLine($"{Environment.NewLine}O limite da conta corrente foi definido em R$ {Limite.ToString("F2")}.{Environment.NewLine}");
 
             return Limite;
-        }
-
-        // Abrir Conta
-        public override void AbrirConta()
-        {
-            base.AbrirConta();
         }
 
         // Saldo
