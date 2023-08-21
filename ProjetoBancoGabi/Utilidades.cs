@@ -10,11 +10,11 @@ namespace ProjetoBancoAda
     {       
         // PROPRIEDADES -----
 
-        public double DoubleValidado { get; set; }
-        public int IntValidado { get; set; }
+        public double DoubleValidado { get; private set; }
+        public int IntValidado { get; private set; }
         public int OpcaoOperacao { get; set; }
-        public int Senha { get; set; }
-        public long CPFValidado { get; set; }
+        public int Senha { get; private set; }
+        public long CPFValidado { get; private set; }
         public string Mensagem { get; set; }
         public string TextoValidado { get; set; }
         public DateTime DataValidada { get; set; }
@@ -159,11 +159,23 @@ namespace ProjetoBancoAda
                 {
                     Console.Write(Mensagem);
                     DataValidada = DateTime.Parse(Console.ReadLine());
-                    validacao = true;
+
+                    if (DataValidada < DateTime.Now)
+                    {
+                        validacao = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"\u001b[31mA data de nascimento deve ser maior que a data atual." +
+                            $"Só abrimos contas para pessoas que já nasceram!{Environment.NewLine}\u001b[0m");
+                    }
+
+                    
+                    
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Digite um valor válido{Environment.NewLine}\u001b[0m");
+                    Console.WriteLine($"\u001b[31mOops, tivemos um erro! Digite um valor válido.{Environment.NewLine}\u001b[0m");
                 }
 
             }

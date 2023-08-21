@@ -14,7 +14,7 @@ namespace ProjetoBancoAda
         
 
         // PROPRIEDADES -----
-        public double TaxaRendimento { get; set; } = 0.3;
+        private double TaxaRendimento { get; set; } = 0.3;
 
         // MÉTODOS -----
 

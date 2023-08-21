@@ -5,7 +5,6 @@
         static void Main(string[] args)
         {
 
-
             Selecao novaSelecao = new();
 
             novaSelecao.Iniciar();

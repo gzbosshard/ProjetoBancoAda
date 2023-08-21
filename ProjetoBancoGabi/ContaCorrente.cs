@@ -13,7 +13,7 @@ namespace ProjetoBancoAda
         Utilidades util = new();
 
         // PROPRIEDADES -----
-        public double Limite { get; set; }
+        private double Limite { get; set; }
         public double TaxaDeManutencao { get; set; } = 0.02;
 
 

@@ -23,7 +23,7 @@ namespace ProjetoBancoAda
         public double Saldo { get; protected set; }
         public double SaldoInicial { get; protected set; }
         protected double Limite { get; set; } = 0;
-        protected DateTime DataDeNascimento { get; set; } // validacação para idade aceitável
+        protected DateTime DataDeNascimento { get; set; }
         public double ValorDeposito { get; protected set; }
         public double ValorSaque { get; protected set; }
         public string TipoConta { get; protected set; }
@@ -109,7 +109,7 @@ namespace ProjetoBancoAda
 
             Console.WriteLine($"{Environment.NewLine}----- SALDO -----{Environment.NewLine}");
 
-            Console.WriteLine($"Saldo Inicial: R${SaldoInicial.ToString("F2")}{Environment.NewLine}");
+            Console.WriteLine($"Saldo na abertura da conta: R${SaldoInicial.ToString("F2")}{Environment.NewLine}");
             Console.WriteLine($"Saldo: R${Saldo.ToString("F2")}{Environment.NewLine}");
 
 
